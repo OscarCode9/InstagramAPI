@@ -29,4 +29,7 @@ export default class Db {
   saveUser (user) {
     return Promise.resolve(fix.getUser())
   }
+  getUser (username) {
+    return Promise.resolve(fix.getUser())
+  }
 }
