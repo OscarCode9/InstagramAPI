@@ -12,7 +12,7 @@ export default class Db {
     return Promise.resolve(fix.getImage())
   }
   saveImage (image) {
-    return Promise.resolve(fix.getImage())
+    return Promise.resolve(image)
   }
   likeImage (id) {
     let image = fix.getImage()
@@ -23,6 +23,9 @@ export default class Db {
   getImages () {
     return Promise.resolve(fix.getImages())
   }
+  getImageByUser () {
+    return Promise.resolve(fix.getImageByUser())
+  }
   getImageByTag (tag) {
     return Promise.resolve(fix.getImagesByTag())
   }
@@ -30,6 +33,9 @@ export default class Db {
     return Promise.resolve(fix.getUser())
   }
   getUser (username) {
+    return Promise.resolve(fix.getUser())
+  }
+  authenticate (username, password) {
     return Promise.resolve(fix.getUser())
   }
 }

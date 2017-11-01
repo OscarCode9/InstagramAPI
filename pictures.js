@@ -22,6 +22,11 @@ hash.set('GET /tag/:tag', async function byTag (req, res, params) {
 hash.set('GET /list', async function list (req, res, params) {
   await db.connect()
   let images = await db.getImages()
+  images.forEach(async function (elem) {
+    let username = 'Oscar'
+    let user = await db.getUser(username)
+    elem.user = user
+  }, this)
   await db.disconnect()
   send(res, 200, images)
 })
@@ -35,6 +40,7 @@ hash.set('GET /:id', async function getPicture (req, res, params) {
 
 hash.set('POST /', async function postPicture (req, res, params) {
   let image = await json(req)
+  console.log(image)
   try {
     let token = await utils.extractToken(req)
     let encoded = await utils.verifyToken(token, config.secret, {})

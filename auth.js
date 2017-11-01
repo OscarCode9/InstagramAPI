@@ -4,31 +4,26 @@ import HttpHash from 'http-hash'
 import Db from 'backenplatzi'
 import DbStrub from './test/stub/db'
 import config from './config'
-const env = 'testing'
+import utils from './test/lib/utils'
+const env = 'tes'
 let db = new Db(config.db) // eslint-disable-line no-unused-vars
 if (env === 'test') {
   db = new DbStrub()
 }
 const hash = HttpHash()
-hash.set('POST /', async function saveUser (req, res, params) {
-  let user = await json(req)
-  await db.connect()
-  let created = await db.saveUser(user)
-  await db.disconnect()
-  delete created.email
-  delete created.password
-  send(res, 201, created)
-})
-hash.set('GET /:username', async function getUser (req, res, params) {
-  let username = params.username
-  await db.connect()
-  let user = await db.getUser(username)
 
-  let images = await db.getImageByUser(username)
-  user.pictures = images
-  delete user.email
-  delete user.password
-  send(res, 200, user)
+hash.set('POST /', async function authenticate (req, res, params) {
+  let credentials = await json(req)
+  await db.connect()
+  let auth = await db.authenticate(credentials.username, credentials.password)
+  console.log(auth)
+  if (!auth) {
+    return send(res, 401, { error: 'invalid credentials' })
+  }
+  let token = await utils.signToken({
+    username: credentials.username
+  }, config.secret)
+  send(res, 200, token)
 })
 export default async function main (req, res) {
   let { method, url } = req

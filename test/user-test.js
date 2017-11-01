@@ -33,6 +33,8 @@ test('POST /', async t => {
 })
 test('GET /:username', async t => {
   let user = fixtures.getUser()
+  let images = fixtures.getImageByUser()
+  user.pictures = images
   let url = t.context.url
   let options = {
     method: 'GET',
