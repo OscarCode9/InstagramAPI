@@ -5,7 +5,7 @@ import Db from 'backenplatzi'
 import DbStrub from './test/stub/db'
 import config from './config'
 import utils from './test/lib/utils'
-const env = 'test'
+const env = 'testing'
 let db = new Db(config.db)
 if (env === 'test') {
   db = new DbStrub()
@@ -40,18 +40,21 @@ hash.set('GET /:id', async function getPicture (req, res, params) {
 
 hash.set('POST /', async function postPicture (req, res, params) {
   let image = await json(req)
-  console.log(image)
+ 
   try {
     let token = await utils.extractToken(req)
     let encoded = await utils.verifyToken(token, config.secret, {})
+    console.log(encoded.userId)
+    console.log(image.userId)
     if (encoded && encoded.userId !== image.userId) {
       return send(res, 401, { error: 'invalid token' })
     }
   } catch (e) {
-    return send(res, 401, { error: 'invalid token' })
+    return send(res, 500, { error: e })
   }
   await db.connect()
   let created = await db.saveImage(image)
+  console.log(created)
   await db.disconnect()
   send(res, 201, created)
 })

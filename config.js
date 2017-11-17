@@ -5,5 +5,5 @@ export default {
     db: 'platzigram',
     setup: true
   },
-  secret: process.env.PLATZIGRAM_SECRET || 'pl4tzi' // never use default
+  secret: process.env.PLATZIGRAM_SECRET || 'pla4tzi' // never use default
 }

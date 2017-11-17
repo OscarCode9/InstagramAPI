@@ -4,6 +4,7 @@ import HttpHash from 'http-hash'
 import Db from 'backenplatzi'
 import DbStrub from './test/stub/db'
 import config from './config'
+import gravatar from 'gravatar'
 const env = 'testing'
 let db = new Db(config.db) // eslint-disable-line no-unused-vars
 if (env === 'test') {
@@ -26,6 +27,7 @@ hash.set('GET /:username', async function getUser (req, res, params) {
 
   let images = await db.getImageByUser(username)
   user.pictures = images
+  user.avatar = gravatar.url(user.email)
   delete user.email
   delete user.password
   send(res, 200, user)
